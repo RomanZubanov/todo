@@ -31,3 +31,15 @@
         height: 50px;
     }
 }
+
+.clear-completed,
+html .clear-completed:active {
+    position: relative;
+    line-height: 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.clear-completed:hover {
+    text-decoration: underline;
+}

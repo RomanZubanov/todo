@@ -1,39 +1,47 @@
-import React from "react";
+import React, {Component} from "react";
 import Task from "../task";
+import InputEditingTask from "../input-editing-task";
 
 import './task-list.css'
 
-const TaskList = ({todos} ) => {
+export default class TaskList extends Component {
 
-    const elements = todos.map((item) => {
+    createElements = () => {
+        return (this.props.todos.map((item) =>{
 
-        const { label, timeTaskCreation, completedTask = false, editingTask = false, id } = item
-
-        let classTask = ''
+        let classTask = '';
         let inputEditingTask = null
 
-        if (completedTask) {
+        if (item.completedTask) {
             classTask = 'completed'
         }
 
-        if (editingTask) {
+        if (item.editingTask) {
             classTask = 'editing'
-            inputEditingTask = <input type="text" className="edit" value="Editing task" />
+            inputEditingTask = <InputEditingTask value={item.label} id={item.id} onSubmitEditing={this.props.onSubmitEditing}/>
         }
 
         return (
-            <li key={ id } className={classTask}>
-                <Task label={ label } timeTaskCreation={ timeTaskCreation } />
+            <li key={ item.id } className={classTask}>
+                <Task
+                    label={item.label}
+                    timeTaskCreation={ item.timeTaskCreation }
+                    completedTask={item.completedTask}
+                    onCompleted={() => this.props.onCompleted(item.id)}
+                    onDeleted={() => this.props.onDeleted(item.id)}
+                    onEdited={() => this.props.onEdited(item.id)}
+                />
                 { inputEditingTask }
             </li>
         )
-    })
+        }))
+    }
 
-    return (
-        <ul className='todo-list'>
-            { elements }
-        </ul>
-    )
-};
-
-export default TaskList;
+    render() {
+        return (
+            <ul className='todo-list'>
+                { this.createElements() }
+            </ul>
+        )
+    }
+}
