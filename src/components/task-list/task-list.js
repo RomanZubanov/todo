@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
 import Task from "../task";
 import InputEditingTask from "../input-editing-task";
 
@@ -12,6 +13,14 @@ export default class TaskList extends Component {
         onDeleted: () => {},
         onEdited: () => {},
         onSubmitEditing: () => {},
+    }
+
+    static propTypes = {
+        todos: PropTypes.arrayOf(PropTypes.object),
+        onCompleted: PropTypes.func,
+        onDeleted: PropTypes.func,
+        onEdited: PropTypes.func,
+        onSubmitEditing: PropTypes.func,
     }
 
     createElements = () => {

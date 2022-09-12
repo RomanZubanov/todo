@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import './input-editing-task.css'
+import PropTypes from "prop-types";
 
 export default class InputEditingTask extends Component {
 
@@ -7,16 +8,19 @@ export default class InputEditingTask extends Component {
         value: ''
     }
 
+    static propTypes = {
+        value: PropTypes.string
+    }
+
     state = {
         value: this.props.value
     }
 
     editValue = (event) => {
-        this.setState(({value}) => {
-            return {
+        this.setState({
                 value: event.target.value
             }
-        })
+        )
     }
 
     onSubmit = (event) => {

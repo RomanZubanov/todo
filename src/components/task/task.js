@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
 import { formatDistanceToNow } from 'date-fns'
 
 export default class Task extends Component {
@@ -10,6 +11,15 @@ export default class Task extends Component {
         onCompleted: () => {},
         onDeleted: () => {},
         onEdited: () => {},
+    }
+
+    static propTypes = {
+        label: PropTypes.string,
+        timeTaskCreation: PropTypes.object,
+        completedTask: PropTypes.bool,
+        onCompleted: PropTypes.func,
+        onDeleted: PropTypes.func,
+        onEdited: PropTypes.func,
     }
 
     state = {

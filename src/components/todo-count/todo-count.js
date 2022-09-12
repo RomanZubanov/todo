@@ -1,6 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import './todo-count.css'
+
 
 const TodoCount = ({todoCountLeft}) => {
 
@@ -14,6 +16,10 @@ const TodoCount = ({todoCountLeft}) => {
 
 TodoCount.defaultProps = {
     todoCountLeft: 0,
+}
+
+TodoCount.propTypes = {
+    todoCountLeft: PropTypes.number
 }
 
 export default TodoCount

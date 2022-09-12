@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 
 import './new-task-form.css'
+import PropTypes from "prop-types";
 
 export default class NewTaskForm extends Component {
 
     static defaultProps = {
-        onAddItem: () => {}
+        onAddItem: () => {},
+    }
+
+    static propTypes = {
+        onAddItem: PropTypes.func,
     }
 
     state = {
