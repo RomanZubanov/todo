@@ -4,6 +4,10 @@ import './tasks-filter.css'
 
 export default class TaskFilter extends Component {
 
+    static defaultProps = {
+        onFilter: () => {},
+    }
+
     state = {
         selectedButton: {
             all: true,

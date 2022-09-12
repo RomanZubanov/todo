@@ -3,6 +3,10 @@ import './input-editing-task.css'
 
 export default class InputEditingTask extends Component {
 
+    static defaultProps = {
+        value: ''
+    }
+
     state = {
         value: this.props.value
     }

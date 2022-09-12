@@ -3,6 +3,15 @@ import { formatDistanceToNow } from 'date-fns'
 
 export default class Task extends Component {
 
+    static defaultProps = {
+        label: '',
+        timeTaskCreation: (new Date()),
+        completedTask: false,
+        onCompleted: () => {},
+        onDeleted: () => {},
+        onEdited: () => {},
+    }
+
     state = {
         timeCreation: formatDistanceToNow(this.props.timeTaskCreation, {includeSeconds: true})
     }

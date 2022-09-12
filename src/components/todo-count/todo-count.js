@@ -12,4 +12,8 @@ const TodoCount = ({todoCountLeft}) => {
     return <span className="todo-count">{countItemLeft(todoCountLeft)}</span>
 }
 
+TodoCount.defaultProps = {
+    todoCountLeft: 0,
+}
+
 export default TodoCount

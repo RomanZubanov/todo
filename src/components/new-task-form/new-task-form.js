@@ -4,6 +4,10 @@ import './new-task-form.css'
 
 export default class NewTaskForm extends Component {
 
+    static defaultProps = {
+        onAddItem: () => {}
+    }
+
     state = {
         label: '',
     }
@@ -25,7 +29,6 @@ export default class NewTaskForm extends Component {
             })
         }
     }
-
 
     render() {
         return (

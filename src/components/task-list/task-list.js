@@ -6,6 +6,14 @@ import './task-list.css'
 
 export default class TaskList extends Component {
 
+    static defaultProps = {
+        todos: [{label: 'label', timeTaskCreation: (new Date()), completedTask: false, editingTask: false, id: 0}],
+        onCompleted: () => {},
+        onDeleted: () => {},
+        onEdited: () => {},
+        onSubmitEditing: () => {},
+    }
+
     createElements = () => {
         return (this.props.todos.map((item) =>{
 

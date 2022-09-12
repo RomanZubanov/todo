@@ -12,4 +12,8 @@ const Header = ({onAddItem}) => {
     )
 }
 
+Header.defaultProps = {
+    onAddItem: () => {}
+}
+
 export default Header

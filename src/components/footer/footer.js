@@ -14,4 +14,10 @@ const Footer = ({onFilter, onClearCompleted, todoCountLeft}) => {
     )
 }
 
+Footer.defaultProps = {
+    onFilter: () => {},
+    onClearCompleted: () => {},
+    todoCountLeft: () => {},
+}
+
 export default Footer
