@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import { formatDistanceToNow } from 'date-fns'
 
 import Header from '../header'
 import TaskList from "../task-list";
@@ -10,8 +9,6 @@ import './app.css'
 export default class App extends Component {
 
     maxID = 1
-
-    timeTaskCreation = formatDistanceToNow(new Date());
 
     state = {
         todoData: [
@@ -24,7 +21,7 @@ export default class App extends Component {
     }
 
     createTodoItem(label) {
-        return {label, timeTaskCreation: this.timeTaskCreation, completedTask: false, editingTask: false, id: this.maxID++}
+        return {label, timeTaskCreation: (new Date()), completedTask: false, editingTask: false, id: this.maxID++}
     }
 
     onAddItem = (label) => {
