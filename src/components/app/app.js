@@ -6,6 +6,8 @@ import Footer from '../footer';
 
 import './app.css';
 
+let roman;
+
 export default class App extends Component {
   maxID = 1;
 
