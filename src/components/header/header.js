@@ -1,25 +1,25 @@
 import React from 'react';
-import PropTypes from "prop-types";
-import NewTaskForm from "../new-task-form";
+import PropTypes from 'prop-types';
 
-import './header.css'
+import NewTaskForm from '../new-task-form';
 
-const Header = ({onAddItem}) => {
-    return (
-        <header>
-           <h1>todos</h1>
-            <NewTaskForm onAddItem={onAddItem} />
-        </header>
-    )
-}
+import './header.css';
+
+const Header = ({ onAddItem }) => {
+  return (
+    <header>
+      <h1>todos</h1>
+      <NewTaskForm onAddItem={onAddItem} />
+    </header>
+  );
+};
 
 Header.defaultProps = {
-    onAddItem: () => {},
-}
+  onAddItem: () => {},
+};
 
 Header.propTypes = {
-    onAddItem: PropTypes.func,
-}
+  onAddItem: PropTypes.func,
+};
 
-
-export default Header
+export default Header;

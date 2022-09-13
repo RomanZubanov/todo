@@ -1,2 +1,2 @@
-import InputEditingTask from "./input-editing-task";
-export default InputEditingTask
+import InputEditingTask from './input-editing-task';
+export default InputEditingTask;

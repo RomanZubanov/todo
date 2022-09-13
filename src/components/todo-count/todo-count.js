@@ -1,25 +1,23 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import './todo-count.css'
+import './todo-count.css';
 
+const TodoCount = ({ todoCountLeft }) => {
+  const countItemLeft = (count) => {
+    if (count < 2) return `${todoCountLeft} item left`;
+    return `${todoCountLeft} items left`;
+  };
 
-const TodoCount = ({todoCountLeft}) => {
-
-    const countItemLeft = (count) => {
-        if (count < 2) return `${todoCountLeft} item left`;
-        return `${todoCountLeft} items left`
-    }
-
-    return <span className="todo-count">{countItemLeft(todoCountLeft)}</span>
-}
+  return <span className="todo-count">{countItemLeft(todoCountLeft)}</span>;
+};
 
 TodoCount.defaultProps = {
-    todoCountLeft: 0,
-}
+  todoCountLeft: 0,
+};
 
 TodoCount.propTypes = {
-    todoCountLeft: PropTypes.number
-}
+  todoCountLeft: PropTypes.number,
+};
 
-export default TodoCount
+export default TodoCount;
