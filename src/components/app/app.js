@@ -20,7 +20,20 @@ export default class App extends Component {
   };
 
   createTodoItem(label) {
-    return { label, timeTaskCreation: new Date(), completedTask: false, editingTask: false, id: this.maxID++ };
+    return {
+      label,
+      timeTaskCreation: new Date(),
+      completedTask: false,
+      editingTask: false,
+      timer: {
+        timeStart: 0,
+        timePause: 0,
+        pauseSum: 0,
+        working: false,
+        activated: false,
+      },
+      id: this.maxID++,
+    };
   }
 
   onAddItem = (label) => {
@@ -96,6 +109,49 @@ export default class App extends Component {
     });
   };
 
+  onTimerStart = (idx, timeStart) => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: todoData.map((item, id) => {
+          let { activated, working, pauseSum, timePause } = item.timer;
+          if (id === idx) {
+            if (!activated) {
+              return { ...item, timer: { ...item.timer, timeStart, activated: true, working: true } };
+            }
+            if (!working) {
+              pauseSum += new Date() - timePause;
+              return { ...item, timer: { ...item.timer, working: true, pauseSum } };
+            }
+          }
+          return item;
+        }),
+      };
+    });
+  };
+
+  onTimerPause = (idx, timePause) => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: todoData.map((item, id) => {
+          const { working } = item.timer;
+          if (id === idx) {
+            if (working) {
+              return {
+                ...item,
+                timer: {
+                  ...item.timer,
+                  timePause,
+                  working: false,
+                },
+              };
+            }
+          }
+          return item;
+        }),
+      };
+    });
+  };
+
   render() {
     return (
       <section className="todoapp">
@@ -107,6 +163,8 @@ export default class App extends Component {
             onDeleted={this.onDeleted}
             onEdited={this.onEdited}
             onSubmitEditing={this.onSubmitEditing}
+            onTimerStart={this.onTimerStart}
+            onTimerPause={this.onTimerPause}
           />
           <Footer
             onFilter={this.onFilter}

@@ -25,7 +25,7 @@ export default class TaskList extends Component {
   };
 
   createElements = () => {
-    return this.props.todos.map((item) => {
+    return this.props.todos.map((item, idx) => {
       let classTask = '';
       let inputEditingTask = null;
 
@@ -43,8 +43,11 @@ export default class TaskList extends Component {
       return (
         <li key={item.id} className={classTask}>
           <Task
+            idx={idx}
+            timer={item.timer}
+            onTimerStart={this.props.onTimerStart}
+            onTimerPause={this.props.onTimerPause}
             label={item.label}
-            timeTaskCreation={item.timeTaskCreation}
             completedTask={item.completedTask}
             onCompleted={() => this.props.onCompleted(item.id)}
             onDeleted={() => this.props.onDeleted(item.id)}

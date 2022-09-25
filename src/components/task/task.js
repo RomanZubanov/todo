@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { formatDistanceToNow } from 'date-fns';
+
+import TaskTimer from '../task-timer';
+import TimeCreation from '../time-creation';
+
+import './task.css';
 
 export default class Task extends Component {
   static defaultProps = {
@@ -21,22 +25,6 @@ export default class Task extends Component {
     onEdited: PropTypes.func,
   };
 
-  state = {
-    timeCreation: formatDistanceToNow(this.props.timeTaskCreation, { includeSeconds: true }),
-  };
-
-  componentDidMount() {
-    this.timerID = setInterval(() => {
-      this.setState({
-        timeCreation: formatDistanceToNow(this.props.timeTaskCreation, { includeSeconds: true }),
-      });
-    }, 10000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
   render() {
     return (
       <div className="view">
@@ -47,8 +35,14 @@ export default class Task extends Component {
           onChange={this.props.onCompleted}
         />
         <label>
-          <span className="description">{this.props.label}</span>
-          <span className="created">{`Created ${this.state.timeCreation} ago`}</span>
+          <span className="title">{this.props.label}</span>
+          <TaskTimer
+            onTimerStart={this.props.onTimerStart}
+            onTimerPause={this.props.onTimerPause}
+            idx={this.props.idx}
+            timer={this.props.timer}
+          />
+          <TimeCreation timeTaskCreation={this.props.timeTaskCreation} />
         </label>
         <button className="icon icon-edit" onClick={this.props.onEdited}></button>
         <button className="icon icon-destroy" onClick={this.props.onDeleted}></button>
