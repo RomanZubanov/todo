@@ -6,7 +6,7 @@ import TasksFilter from '../tasks-filter';
 
 import './footer.css';
 
-const Footer = ({ onFilter, onClearCompleted, todoCountLeft }) => {
+function Footer({ onFilter, onClearCompleted, todoCountLeft }) {
   return (
     <footer className="footer">
       <TodoCount todoCountLeft={todoCountLeft} />
@@ -16,7 +16,7 @@ const Footer = ({ onFilter, onClearCompleted, todoCountLeft }) => {
       </button>
     </footer>
   );
-};
+}
 
 Footer.defaultProps = {
   onFilter: () => {},

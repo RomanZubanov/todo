@@ -16,6 +16,7 @@ export default class NewTaskForm extends Component {
   };
 
   onLabelChange = (event) => {
+    console.log(event.target.value);
     this.setState({
       label: event.target.value,
     });
@@ -35,14 +36,17 @@ export default class NewTaskForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onAddItem}>
+      <form onSubmit={this.onAddItem} className="new-todo-form">
         <input
           className="new-todo"
           value={this.state.label}
           onChange={this.onLabelChange}
-          placeholder="What needs to be done?"
+          placeholder="Task"
           autoFocus
         />
+        <input className="new-todo-form__timer" placeholder="Min" autoFocus />
+        <input className="new-todo-form__timer" placeholder="Sec" autoFocus />
+        <input className="submit-btn-temp" type="submit" value="Submit" />
       </form>
     );
   }

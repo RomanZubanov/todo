@@ -9,14 +9,119 @@ import './app.css';
 export default class App extends Component {
   maxID = 1;
 
-  state = {
-    todoData: [
-      this.createTodoItem('Completed task'),
-      this.createTodoItem('Editing task'),
-      this.createTodoItem('Active task Done'),
-      this.createTodoItem('To Drink Coffee'),
-    ],
-    filter: 'all',
+  constructor(props) {
+    super(props);
+    this.state = {
+      todoData: [this.createTodoItem('fw'), this.createTodoItem('fw'), this.createTodoItem('fw')],
+      filter: 'all',
+    };
+  }
+
+  onAddItem = (label) => {
+    this.setState(({ todoData }) => ({ todoData: [...todoData, this.createTodoItem(label)] }));
+  };
+
+  onCompleted = (id) => {
+    console.log(id);
+    this.setState(({ todoData }) =>
+      todoData.map((item) => {
+        if (item.id === id) {
+          item.completedTask = !item.completedTask;
+          return item;
+        }
+        return item;
+      })
+    );
+  };
+
+  onDeleted = (id) => {
+    this.setState(({ todoData }) => {
+      const idx = todoData.findIndex((item) => item.id === id);
+      return { todoData: [...todoData.slice(0, idx), ...todoData.slice(idx + 1)] };
+    });
+  };
+
+  onFilter = (buttonName) => {
+    this.setState({
+      filter: buttonName,
+    });
+  };
+
+  filterTodoData = (filter) => {
+    const { todoData } = this.state;
+    if (filter === 'active') {
+      return todoData.filter((item) => !item.completedTask);
+    }
+    if (filter === 'completed') {
+      return todoData.filter((item) => item.completedTask);
+    }
+    return todoData;
+  };
+
+  onClearCompleted = () => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.filter((item) => item.completedTask === false),
+    }));
+  };
+
+  todoCounterLeft = () => {
+    const { todoData } = this.state;
+    return todoData.reduce((sum, item) => {
+      if (!item.completedTask) sum += 1;
+      return sum;
+    }, 0);
+  };
+
+  onEdited = (id) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((item) => (item.id === id ? { ...item, editingTask: true } : item)),
+    }));
+  };
+
+  onSubmitEditing = (id, value) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((item) => (item.id === id ? { ...item, label: value, editingTask: false } : item)),
+    }));
+  };
+
+  onTimerStart = (idx, timeStart) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((item, id) => {
+        const { activated, working, timePause } = item.timer;
+        let { pauseSum } = item.timer;
+        if (id === idx) {
+          if (!activated) {
+            return { ...item, timer: { ...item.timer, timeStart, activated: true, working: true } };
+          }
+          if (!working) {
+            pauseSum += new Date().getTime() - timePause;
+            return { ...item, timer: { ...item.timer, working: true, pauseSum } };
+          }
+        }
+        return item;
+      }),
+    }));
+  };
+
+  onTimerPause = (idx, timePause) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((item, id) => {
+        const { working } = item.timer;
+        if (id === idx) {
+          if (working) {
+            return {
+              ...item,
+              timer: {
+                ...item.timer,
+                timePause,
+                working: false,
+              },
+            };
+          }
+        }
+        return item;
+      }),
+    }));
   };
 
   createTodoItem(label) {
@@ -36,129 +141,14 @@ export default class App extends Component {
     };
   }
 
-  onAddItem = (label) => {
-    this.setState(({ todoData }) => {
-      return { todoData: [...todoData, this.createTodoItem(label)] };
-    });
-  };
-
-  onCompleted = (id) => {
-    this.setState(({ todoData }) => {
-      return todoData.map((item) => {
-        if (item.id === id) {
-          item.completedTask = !item.completedTask;
-          return item;
-        } else {
-          return item;
-        }
-      });
-    });
-  };
-
-  onDeleted = (id) => {
-    this.setState(({ todoData }) => {
-      let idx = todoData.findIndex((item) => item.id === id);
-      return { todoData: [...todoData.slice(0, idx), ...todoData.slice(idx + 1)] };
-    });
-  };
-
-  onFilter = (buttonName) => {
-    this.setState({
-      filter: buttonName,
-    });
-  };
-
-  filterTodoData = (filter) => {
-    if (filter === 'all') {
-      return this.state.todoData;
-    } else if (filter === 'active') {
-      return this.state.todoData.filter((item) => !item.completedTask);
-    } else if (filter === 'completed') {
-      return this.state.todoData.filter((item) => item.completedTask);
-    }
-  };
-
-  onClearCompleted = () => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: todoData.filter((item) => item.completedTask === false),
-      };
-    });
-  };
-
-  todoCounterLeft = () => {
-    return this.state.todoData.reduce((sum, item) => {
-      if (!item.completedTask) sum++;
-      return sum;
-    }, 0);
-  };
-
-  onEdited = (id) => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: todoData.map((item) => (item.id === id ? { ...item, editingTask: true } : item)),
-      };
-    });
-  };
-
-  onSubmitEditing = (id, value) => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: todoData.map((item) => (item.id === id ? { ...item, label: value, editingTask: false } : item)),
-      };
-    });
-  };
-
-  onTimerStart = (idx, timeStart) => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: todoData.map((item, id) => {
-          let { activated, working, pauseSum, timePause } = item.timer;
-          if (id === idx) {
-            if (!activated) {
-              return { ...item, timer: { ...item.timer, timeStart, activated: true, working: true } };
-            }
-            if (!working) {
-              pauseSum += new Date() - timePause;
-              return { ...item, timer: { ...item.timer, working: true, pauseSum } };
-            }
-          }
-          return item;
-        }),
-      };
-    });
-  };
-
-  onTimerPause = (idx, timePause) => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: todoData.map((item, id) => {
-          const { working } = item.timer;
-          if (id === idx) {
-            if (working) {
-              return {
-                ...item,
-                timer: {
-                  ...item.timer,
-                  timePause,
-                  working: false,
-                },
-              };
-            }
-          }
-          return item;
-        }),
-      };
-    });
-  };
-
   render() {
+    const { filter } = this.state;
     return (
       <section className="todoapp">
         <Header onAddItem={this.onAddItem} />
         <section className="main">
           <TaskList
-            todos={this.filterTodoData(this.state.filter)}
+            todos={this.filterTodoData(filter)}
             onCompleted={this.onCompleted}
             onDeleted={this.onDeleted}
             onEdited={this.onEdited}

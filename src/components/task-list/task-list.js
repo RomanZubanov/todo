@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -24,8 +23,8 @@ export default class TaskList extends Component {
     onSubmitEditing: PropTypes.func,
   };
 
-  createElements = () => {
-    return this.props.todos.map((item, idx) => {
+  createElements = () =>
+    this.props.todos.map((item, idx) => {
       let classTask = '';
       let inputEditingTask = null;
 
@@ -57,7 +56,6 @@ export default class TaskList extends Component {
         </li>
       );
     });
-  };
 
   render() {
     return <ul className="todo-list">{this.createElements()}</ul>;

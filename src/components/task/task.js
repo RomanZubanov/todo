@@ -44,8 +44,8 @@ export default class Task extends Component {
           />
           <TimeCreation timeTaskCreation={this.props.timeTaskCreation} />
         </label>
-        <button className="icon icon-edit" onClick={this.props.onEdited}></button>
-        <button className="icon icon-destroy" onClick={this.props.onDeleted}></button>
+        <button className="icon icon-edit" onClick={this.props.onEdited} />
+        <button className="icon icon-destroy" onClick={this.props.onDeleted} />
       </div>
     );
   }
