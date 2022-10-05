@@ -84,12 +84,12 @@ export default class App extends Component {
     }));
   };
 
-  onTimerStart = (idx, timeStart) => {
+  onTimerStart = (id, timeStart) => {
     this.setState(({ todoData }) => ({
-      todoData: todoData.map((item, id) => {
+      todoData: todoData.map((item) => {
         const { activated, working, timePause } = item.timer;
         let { pauseSum } = item.timer;
-        if (id === idx) {
+        if (id === item.id) {
           if (!activated) {
             return { ...item, timer: { ...item.timer, timeStart, activated: true, working: true } };
           }
@@ -103,11 +103,11 @@ export default class App extends Component {
     }));
   };
 
-  onTimerPause = (idx, timePause) => {
+  onTimerPause = (id, timePause) => {
     this.setState(({ todoData }) => ({
-      todoData: todoData.map((item, id) => {
+      todoData: todoData.map((item) => {
         const { working } = item.timer;
-        if (id === idx) {
+        if (id === item.id) {
           if (working) {
             return {
               ...item,

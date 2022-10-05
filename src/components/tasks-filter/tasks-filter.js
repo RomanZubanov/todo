@@ -34,38 +34,38 @@ export default class TaskFilter extends Component {
 
   render() {
     return (
-      <ul className="filters">
-        <li>
-          <button
-            className={this.state.selectedButton.all ? 'selected' : ''}
+      <div className="filters">
+        <label className={this.state.selectedButton.all ? 'selected' : ''}>
+          <input
+            type="radio"
+            name="filter"
             onClick={() => {
               this.onButtonSelect('all');
             }}
-          >
-            All
-          </button>
-        </li>
-        <li>
-          <button
-            className={this.state.selectedButton.active ? 'selected' : ''}
+          />
+          All
+        </label>
+        <label className={this.state.selectedButton.active ? 'selected' : ''}>
+          <input
+            type="radio"
+            name="filter"
             onClick={() => {
               this.onButtonSelect('active');
             }}
-          >
-            Active
-          </button>
-        </li>
-        <li>
-          <button
-            className={this.state.selectedButton.completed ? 'selected' : ''}
+          />
+          Active
+        </label>
+        <label className={this.state.selectedButton.completed ? 'selected' : ''}>
+          <input
+            type="radio"
+            name="filter"
             onClick={() => {
               this.onButtonSelect('completed');
             }}
-          >
-            Completed
-          </button>
-        </li>
-      </ul>
+          />
+          Completed
+        </label>
+      </div>
     );
   }
 }

@@ -34,16 +34,16 @@ export default class Task extends Component {
           checked={this.props.completedTask}
           onChange={this.props.onCompleted}
         />
-        <label>
+        <div className="task-info">
           <span className="title">{this.props.label}</span>
           <TaskTimer
             onTimerStart={this.props.onTimerStart}
             onTimerPause={this.props.onTimerPause}
-            idx={this.props.idx}
+            id={this.props.id}
             timer={this.props.timer}
           />
           <TimeCreation timeTaskCreation={this.props.timeTaskCreation} />
-        </label>
+        </div>
         <button className="icon icon-edit" onClick={this.props.onEdited} />
         <button className="icon icon-destroy" onClick={this.props.onDeleted} />
       </div>
