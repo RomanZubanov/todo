@@ -1,40 +1,34 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import './input-editing-task.css';
 import PropTypes from 'prop-types';
 
-export default class InputEditingTask extends Component {
-  static defaultProps = {
-    value: '',
+export default function InputEditingTask({ value, id, onSubmitEditing }) {
+  const [inputText, setInputText] = useState(value);
+
+  const editInputText = (event) => {
+    setInputText(event.target.value);
   };
 
-  static propTypes = {
-    value: PropTypes.string,
-  };
-
-  state = {
-    value: this.props.value,
-  };
-
-  editValue = (event) => {
-    this.setState({
-      value: event.target.value,
-    });
-  };
-
-  onSubmit = (event) => {
+  const onSubmit = (event) => {
     event.preventDefault();
-    if (this.state.value.trim() === '') {
+    if (inputText.trim() === '') {
       alert('Вы ввели пустую строку. Введите хотя бы один символ кроме пробела');
     } else {
-      this.props.onSubmitEditing(this.props.id, this.state.value);
+      onSubmitEditing(id, inputText);
     }
   };
 
-  render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input type="text" className="edit" value={this.state.value} onChange={this.editValue} />
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={onSubmit}>
+      <input type="text" className="edit" value={inputText} onChange={editInputText} />
+    </form>
+  );
 }
+
+InputEditingTask.defaultProps = {
+  value: '',
+};
+
+InputEditingTask.propTypes = {
+  value: PropTypes.string,
+};

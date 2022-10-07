@@ -1,75 +1,56 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
+import PropsType from 'prop-types';
 
 import convertTimestampToTimer from '../../services/convertTimestampToTimer';
 
 import './task-timer.css';
 
-export default class TaskTimer extends Component {
-  state = {
-    timerTick: null,
-  };
+export default function TaskTimer({ onTimerStart, onTimerPause, id, timer }) {
+  const [timerTick, setTimerTick] = useState('00 : 00');
+  const [working, setWorking] = useState(false);
 
-  componentDidMount() {
-    if (this.props.timer.activated && !this.props.timer.working) {
-      this.setState({
-        timerTick: convertTimestampToTimer(
-          this.props.timer.timeStart,
-          this.props.timer.timePause,
-          this.props.timer.pauseSum
-        ),
-      });
-    } else if (this.props.timer.activated && this.props.timer.working) {
-      this.setState({
-        timerTick: convertTimestampToTimer(this.props.timer.timeStart, new Date().getTime(), this.props.timer.pauseSum),
-      });
-      this.interval = setInterval(() => {
-        if (this.props.timer.working) {
-          this.setState({
-            timerTick: convertTimestampToTimer(
-              this.props.timer.timeStart,
-              new Date().getTime(),
-              this.props.timer.pauseSum
-            ),
-          });
-        }
+  useEffect(() => {
+    let intervalId;
+    if (timer.activated && !timer.working) {
+      setTimerTick(convertTimestampToTimer(timer.timeStart, timer.timePause, timer.pauseSum));
+    } else if (timer.working) {
+      setTimerTick(convertTimestampToTimer(timer.timeStart, new Date().getTime(), timer.pauseSum));
+      intervalId = setInterval(() => {
+        setTimerTick(convertTimestampToTimer(timer.timeStart, new Date().getTime(), timer.pauseSum));
       }, 1000);
-    } else {
-      this.setState({
-        timerTick: '00 : 00',
-      });
     }
-  }
+    return () => clearInterval(intervalId);
+  }, [working, timerTick]);
 
-  onTimerStart = () => {
-    this.props.onTimerStart(this.props.id, new Date().getTime());
-    this.interval = setInterval(() => {
-      if (this.props.timer.working) {
-        this.setState({
-          timerTick: convertTimestampToTimer(
-            this.props.timer.timeStart,
-            new Date().getTime(),
-            this.props.timer.pauseSum
-          ),
-        });
-      }
-    }, 1000);
+  const clickTimerStart = () => {
+    onTimerStart(id, new Date().getTime());
+    setWorking(true);
   };
 
-  onTimerPause = () => {
-    this.props.onTimerPause(this.props.id, new Date().getTime());
+  const clickTimerPause = () => {
+    onTimerPause(id, new Date().getTime());
+    setWorking(false);
   };
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  render() {
-    return (
-      <span className="description">
-        <button className="icon icon-play" onClick={this.onTimerStart} />
-        <button className="icon icon-pause" onClick={this.onTimerPause} />
-        <span className="time">{this.state.timerTick}</span>
-      </span>
-    );
-  }
+  return (
+    <span className="description">
+      <button className="icon icon-play" onClick={clickTimerStart} />
+      <button className="icon icon-pause" onClick={clickTimerPause} />
+      <span className="time">{timerTick}</span>
+    </span>
+  );
 }
+
+TaskTimer.defaultProps = {
+  onTimerStart: () => {},
+  onTimerPause: () => {},
+  id: 0,
+  timer: {},
+};
+
+TaskTimer.propTypes = {
+  onTimerStart: PropsType.func,
+  onTimerPause: PropsType.func,
+  id: PropsType.number,
+  timer: PropsType.object,
+};
