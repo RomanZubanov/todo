@@ -10,6 +10,7 @@ export default function TaskList({
   onSubmitEditing,
   onTimerStart,
   onTimerPause,
+  onTimerEnd,
   onCompleted,
   onDeleted,
   onEdited,
@@ -32,9 +33,11 @@ export default function TaskList({
         <li key={item.id} className={classTask}>
           <Task
             id={item.id}
+            timeTaskCreation={item.timeTaskCreation}
             timer={item.timer}
             onTimerStart={onTimerStart}
             onTimerPause={onTimerPause}
+            onTimerEnd={onTimerEnd}
             label={item.label}
             completedTask={item.completedTask}
             onCompleted={() => onCompleted(item.id)}

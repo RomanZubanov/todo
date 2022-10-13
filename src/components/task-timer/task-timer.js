@@ -1,35 +1,51 @@
 import { useState, useEffect } from 'react';
-import PropsType from 'prop-types';
+import PropTypes from 'prop-types';
 
-import convertTimestampToTimer from '../../services/convertTimestampToTimer';
+import convertTimestampToTimer from '../../helpers/convertTimestampToTimer';
 
 import './task-timer.css';
 
-export default function TaskTimer({ onTimerStart, onTimerPause, id, timer }) {
-  const [timerTick, setTimerTick] = useState('00 : 00');
-  const [working, setWorking] = useState(false);
+export default function TaskTimer({ onTimerStart, onTimerPause, onTimerEnd, id, timer }) {
+  const { timeLeft, timeStart, pauseSum, working, activated, ended } = timer;
+
+  const [timerTick, setTimerTick] = useState(convertTimestampToTimer(0, 0, 0, timeLeft));
+
+  useEffect(() => {
+    if (activated && working && !ended) {
+      setTimerTick(convertTimestampToTimer(timeStart, new Date().getTime(), pauseSum, timeLeft));
+    } else if (activated && !working && !ended) {
+      setTimerTick(convertTimestampToTimer(timeStart, timer.timePause, pauseSum, timeLeft));
+    } else if (ended) {
+      setTimerTick('end');
+    }
+  }, []);
 
   useEffect(() => {
     let intervalId;
-    if (timer.activated && !timer.working) {
-      setTimerTick(convertTimestampToTimer(timer.timeStart, timer.timePause, timer.pauseSum));
-    } else if (timer.working) {
-      setTimerTick(convertTimestampToTimer(timer.timeStart, new Date().getTime(), timer.pauseSum));
+    if (working && !ended) {
       intervalId = setInterval(() => {
-        setTimerTick(convertTimestampToTimer(timer.timeStart, new Date().getTime(), timer.pauseSum));
+        setTimerTick(convertTimestampToTimer(timeStart, new Date().getTime(), pauseSum, timeLeft));
+        console.log('tick ', intervalId);
       }, 1000);
+    } else {
+      console.log('working ', working, 'ended ', ended, 'interval ', intervalId);
+      clearInterval(intervalId);
     }
     return () => clearInterval(intervalId);
-  }, [working, timerTick]);
+  }, [working, ended]);
+
+  useEffect(() => {
+    if (timerTick === 'end') {
+      onTimerEnd(id);
+    }
+  }, [timerTick]);
 
   const clickTimerStart = () => {
     onTimerStart(id, new Date().getTime());
-    setWorking(true);
   };
 
   const clickTimerPause = () => {
     onTimerPause(id, new Date().getTime());
-    setWorking(false);
   };
 
   return (
@@ -49,8 +65,8 @@ TaskTimer.defaultProps = {
 };
 
 TaskTimer.propTypes = {
-  onTimerStart: PropsType.func,
-  onTimerPause: PropsType.func,
-  id: PropsType.number,
-  timer: PropsType.object,
+  onTimerStart: PropTypes.func,
+  onTimerPause: PropTypes.func,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  timer: PropTypes.object,
 };

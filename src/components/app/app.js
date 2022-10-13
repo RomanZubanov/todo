@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import uniqid from 'uniqid';
 
 import Header from '../header';
 import TaskList from '../task-list';
@@ -7,33 +8,39 @@ import Footer from '../footer';
 import './app.css';
 
 export default function App() {
-  let maxID = 1;
-
-  function createTodoItem(label) {
+  function createTodoItem(label, timeleftInSec = 0) {
     return {
       label,
       timeTaskCreation: new Date(),
       completedTask: false,
       editingTask: false,
       timer: {
+        timeLeft: timeleftInSec,
         timeStart: 0,
         timePause: 0,
         pauseSum: 0,
         working: false,
         activated: false,
+        ended: false,
       },
-      id: maxID++,
+      id: uniqid(),
     };
   }
 
   const [todoData, setTodoData] = useState([createTodoItem('fw'), createTodoItem('fw'), createTodoItem('fw')]);
   const [filter, setFilter] = useState('all');
 
-  const onAddItem = (label) => {
-    setTodoData((todoData) => [...todoData, createTodoItem(label)]);
+  const onAddItem = (label, timeLeftInSec) => {
+    setTodoData((todoData) => {
+      return [...todoData, createTodoItem(label, timeLeftInSec)];
+    });
   };
 
   const onCompleted = (id) => {
+    const completed = todoData.filter((item) => item.id === id)[0].completedTask;
+    if (!completed) {
+      onTimerPause(id, new Date().getTime());
+    }
     setTodoData((todoData) =>
       todoData.map((item) => {
         if (item.id === id) {
@@ -90,22 +97,25 @@ export default function App() {
   };
 
   const onTimerStart = (id, timeStart) => {
-    setTodoData((todoData) => {
-      return todoData.map((item) => {
-        const { activated, working, timePause } = item.timer;
-        let { pauseSum } = item.timer;
-        if (id === item.id) {
-          if (!activated) {
-            return { ...item, timer: { ...item.timer, timeStart, activated: true, working: true } };
+    const completed = todoData.filter((item) => item.id === id)[0].completedTask;
+    if (!completed) {
+      setTodoData((todoData) => {
+        return todoData.map((item) => {
+          const { activated, working, timePause } = item.timer;
+          let { pauseSum } = item.timer;
+          if (id === item.id) {
+            if (!activated) {
+              return { ...item, timer: { ...item.timer, timeStart, activated: true, working: true } };
+            }
+            if (!working) {
+              pauseSum += new Date().getTime() - timePause;
+              return { ...item, timer: { ...item.timer, working: true, pauseSum } };
+            }
           }
-          if (!working) {
-            pauseSum += new Date().getTime() - timePause;
-            return { ...item, timer: { ...item.timer, working: true, pauseSum } };
-          }
-        }
-        return item;
+          return item;
+        });
       });
-    });
+    }
   };
 
   const onTimerPause = (id, timePause) => {
@@ -129,6 +139,18 @@ export default function App() {
     });
   };
 
+  const onTimerEnd = (id) => {
+    setTodoData((todoData) => {
+      return todoData.map((item) => {
+        if (id === item.id) {
+          return { ...item, timer: { ...todoData.timer, ended: true } };
+        } else {
+          return item;
+        }
+      });
+    });
+  };
+
   return (
     <section className="todoapp">
       <Header onAddItem={onAddItem} />
@@ -141,6 +163,7 @@ export default function App() {
           onSubmitEditing={onSubmitEditing}
           onTimerStart={onTimerStart}
           onTimerPause={onTimerPause}
+          onTimerEnd={onTimerEnd}
         />
         <Footer onFilter={onFilter} onClearCompleted={onClearCompleted} todoCountLeft={todoCounterLeft()} />
       </section>
