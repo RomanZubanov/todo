@@ -1,1 +1,2 @@
-todo-git-hooks-romanzubanov.vercel.app
+https://todo-git-hooks-romanzubanov.vercel.app/
+
