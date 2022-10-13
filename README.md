@@ -1,1 +1,1 @@
-https://todo-evl0ejcjm-romanzubanov.vercel.app
+todo-git-hooks-romanzubanov.vercel.app
