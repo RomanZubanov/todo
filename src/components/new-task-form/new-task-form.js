@@ -34,7 +34,6 @@ export default function NewTaskForm({ onAddItem }) {
       alert('Вы ввели пустую строку. Введите хотя бы один символ кроме пробела');
     } else {
       const timeLeftInSec = Number(timeLeft.min) * 60 + Number(timeLeft.sec);
-      console.log('TimeLeftInSec', timeLeftInSec);
       onAddItem(label, timeLeftInSec);
       setLabel('');
       setTimeLeft({ min: '', sec: '' });

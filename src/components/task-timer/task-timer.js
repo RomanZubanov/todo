@@ -25,10 +25,8 @@ export default function TaskTimer({ onTimerStart, onTimerPause, onTimerEnd, id, 
     if (working && !ended) {
       intervalId = setInterval(() => {
         setTimerTick(convertTimestampToTimer(timeStart, new Date().getTime(), pauseSum, timeLeft));
-        console.log('tick ', intervalId);
       }, 1000);
     } else {
-      console.log('working ', working, 'ended ', ended, 'interval ', intervalId);
       clearInterval(intervalId);
     }
     return () => clearInterval(intervalId);
@@ -60,6 +58,7 @@ export default function TaskTimer({ onTimerStart, onTimerPause, onTimerEnd, id, 
 TaskTimer.defaultProps = {
   onTimerStart: () => {},
   onTimerPause: () => {},
+  onTimerEnd: () => {},
   id: 0,
   timer: {},
 };
@@ -67,6 +66,7 @@ TaskTimer.defaultProps = {
 TaskTimer.propTypes = {
   onTimerStart: PropTypes.func,
   onTimerPause: PropTypes.func,
+  onTimerEnd: PropTypes.func,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   timer: PropTypes.object,
 };
